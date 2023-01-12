@@ -24,7 +24,7 @@ public class ShoppingCartTest {
 
         final var actualResult = shoppingCart.calculateTotalPrice();
 
-        Assertions.assertEquals(actualResult, BigDecimal.valueOf(16.5));
+        Assertions.assertEquals( actualResult.compareTo( BigDecimal.valueOf(16.5) ), 0);
 
     }
 }

@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 
 public class Product {
 
+    private static final Integer DISCOUNT_QUANTITY_FROM = 4;
+    private static final BigDecimal DISCOUNT = BigDecimal.valueOf( 0.1 );
+
     private final String name;
     private final BigDecimal pricePerUnit;
     private final int quantity;
@@ -39,7 +42,14 @@ public class Product {
     }
 
     public BigDecimal calculateTotalPrice() {
-        return pricePerUnit.multiply( BigDecimal.valueOf( quantity ) );
+
+        if ( quantity >= DISCOUNT_QUANTITY_FROM ) {
+            return pricePerUnit.multiply( BigDecimal.valueOf( quantity ) )
+                               .multiply( BigDecimal.ONE.subtract( DISCOUNT ) );
+        } else {
+            return pricePerUnit.multiply( BigDecimal.valueOf( quantity ) );
+        }
+
     }
 
     @Override

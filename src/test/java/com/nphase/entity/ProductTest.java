@@ -41,13 +41,24 @@ public class ProductTest {
     }
 
     @Test
-    public void calculateTotalPrice() {
+    public void calculateTotalPriceWithoutDiscount() {
 
         final var product = new Product( "Tea", BigDecimal.valueOf( 10 ), 2 );
 
         final var actualResult = product.calculateTotalPrice();
 
-        Assertions.assertEquals( actualResult, BigDecimal.valueOf(20) );
+        Assertions.assertEquals( actualResult.compareTo( BigDecimal.valueOf(20) ), 0 );
+
+    }
+
+    @Test
+    public void calculateTotalPriceWithDiscount() {
+
+        final var product = new Product( "Tea", BigDecimal.valueOf( 10 ), 5 );
+
+        final var actualResult = product.calculateTotalPrice();
+
+        Assertions.assertEquals( actualResult.compareTo( BigDecimal.valueOf(45) ), 0 );
 
     }
 }
