@@ -19,12 +19,12 @@ public class ShoppingCartTest {
     @Test
     public void calculateTotalPrice() {
 
-        final var shoppingCart = new ShoppingCart( List.of( new Product("Tea", BigDecimal.valueOf(5.0), 2),
-                                                            new Product("Coffee", BigDecimal.valueOf(6.5), 1) ) );
+        final var shoppingCart = new ShoppingCart( List.of( new Product("Tea", BigDecimal.valueOf(5.0), 2, new ProductCategory( "drinks" ) ),
+                                                            new Product("Coffee", BigDecimal.valueOf(6.5), 1, new ProductCategory( "drinks" ) ) ) );
 
         final var actualResult = shoppingCart.calculateTotalPrice();
 
         Assertions.assertEquals( actualResult.compareTo( BigDecimal.valueOf(16.5) ), 0);
-
     }
+
 }
