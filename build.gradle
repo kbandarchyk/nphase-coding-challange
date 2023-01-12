@@ -1,9 +1,13 @@
 plugins {
     id 'java'
+    id 'pmd'
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
+
+sourceCompatibility = '11'
+targetCompatibility = '11'
 
 repositories {
     mavenCentral()
@@ -16,4 +20,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+pmd {
+    sourceSets = [ project.sourceSets.main ]
+    ruleSets = ["$rootDir/etc/pmd/maven-pmd-plugin.xml"]
+    toolVersion = "6.41.0"
 }
