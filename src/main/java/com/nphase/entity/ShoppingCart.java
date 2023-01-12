@@ -10,20 +10,23 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 
 public class ShoppingCart {
 
-    private static final Integer PRODUCT_CATEGORY_DISCOUNT_FROM_EXCLUSIVELY = 3;
-    private static final BigDecimal PRODUCT_CATEGORY_DISCOUNT_VALUE = BigDecimal.valueOf( 0.1 );
-
     private final List<Product> products;
+    private final DiscountConfigs discountConfigs;
 
-    public ShoppingCart( final List<Product> products ) {
+    public ShoppingCart( final List<Product> products,
+                         final DiscountConfigs discountConfigs ) {
         this.products = products;
+        this.discountConfigs = discountConfigs;
 
         validate();
     }
 
     private void validate() {
         if ( products == null ) {
-            throw new AppException( "ShoppingCart can not be null in {0}", this );
+            throw new AppException( "ShoppingCart products can not be null in {0}", this );
+        }
+        if ( discountConfigs == null ) {
+            throw new AppException( "ShoppingCart discountConfigs can not be null in {0}", this );
         }
     }
 
@@ -43,13 +46,14 @@ public class ShoppingCart {
 
         if( isAppropriateForProductCategoryDiscount( products ) ) {
             return products.stream()
-                    .map( Product::calculateTotalPrice )
+                    .map( e -> e.calculateTotalPrice( discountConfigs.getProductQuantityConfig() ) )
                     .reduce( BigDecimal::add )
-                    .map( e -> e.multiply( BigDecimal.ONE.subtract( PRODUCT_CATEGORY_DISCOUNT_VALUE ) ) )
+                    .map( e -> e.multiply( BigDecimal.ONE.subtract( discountConfigs.getProductCategoryConfig()
+                                                                                   .getDiscountValue() ) ) )
                     .orElse( BigDecimal.ZERO );
         } else {
             return products.stream()
-                    .map( Product::calculateTotalPrice )
+                    .map( e -> e.calculateTotalPrice( discountConfigs.getProductQuantityConfig() ) )
                     .reduce( BigDecimal::add )
                     .orElse( BigDecimal.ZERO );
         }
@@ -60,13 +64,15 @@ public class ShoppingCart {
 
         return products.stream()
                        .map( Product::getQuantity )
-                       .reduce( 0, Integer::sum ) > PRODUCT_CATEGORY_DISCOUNT_FROM_EXCLUSIVELY;
+                       .reduce( 0, Integer::sum ) > discountConfigs.getProductCategoryConfig()
+                                                                   .getDiscountFromExclusively();
     }
 
     @Override
     public String toString() {
         return "ShoppingCart{" +
                 "products=" + products +
+                ", discountConfigs=" + discountConfigs +
                 '}';
     }
 }

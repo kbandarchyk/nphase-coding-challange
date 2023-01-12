@@ -1,15 +1,11 @@
 package com.nphase.service;
 
 
-import com.nphase.entity.Product;
-import com.nphase.entity.ProductCategory;
-import com.nphase.entity.ShoppingCart;
-import jdk.jfr.Category;
+import com.nphase.entity.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 public class ShoppingCartServiceTest {
@@ -17,10 +13,10 @@ public class ShoppingCartServiceTest {
 
     @Test
     public void calculatesPrice()  {
-        final var cart = new ShoppingCart(Arrays.asList(
-                new Product("Tea", BigDecimal.valueOf(5.0), 2, new ProductCategory( "drinks" ) ),
-                new Product("Coffee", BigDecimal.valueOf(6.5), 1, new ProductCategory( "drinks" ) )
-        ));
+        final var cart = new ShoppingCart( List.of( new Product("Tea", BigDecimal.valueOf(5.0), 2, new ProductCategory( "drinks" ) ),
+                                                    new Product("Coffee", BigDecimal.valueOf(6.5), 1, new ProductCategory( "drinks" ) ) ),
+                                           new DiscountConfigs( new DiscountConfig( 3, BigDecimal.valueOf( 0.1 ) ),
+                                                                new DiscountConfig( 3, BigDecimal.valueOf( 0.1 ) ) ) );
 
         BigDecimal result = service.calculateTotalPrice(cart);
 
@@ -31,11 +27,13 @@ public class ShoppingCartServiceTest {
     public void calculatePriceWithProductDiscount() {
 
         final var cart = new ShoppingCart( List.of( new Product("Tea", BigDecimal.valueOf(5.0), 4, new ProductCategory( "drinks" )),
-                                                    new Product("Cheese", BigDecimal.valueOf(3.5), 3, new ProductCategory( "food" )) ) );
+                                                    new Product("Cheese", BigDecimal.valueOf(3.5), 3, new ProductCategory( "food" ) ) ),
+                                           new DiscountConfigs( new DiscountConfig( 3, BigDecimal.valueOf( 0.1 ) ),
+                                                                new DiscountConfig( 10, BigDecimal.valueOf( 0.1 ) ) ) );
 
         final var actualResult = cart.calculateTotalPrice();
 
-        Assertions.assertEquals( actualResult.compareTo( BigDecimal.valueOf(26.7) ), 0 );
+        Assertions.assertEquals( actualResult.compareTo( BigDecimal.valueOf(28.5) ), 0 );
     }
 
     @Test
@@ -43,7 +41,9 @@ public class ShoppingCartServiceTest {
 
         final var shoppingCart = new ShoppingCart( List.of( new Product("Tea", BigDecimal.valueOf(5.3), 2, new ProductCategory( "drinks" ) ),
                                                             new Product("Coffee", BigDecimal.valueOf(3.5), 2, new ProductCategory( "drinks" ) ),
-                                                            new Product("Cheese", BigDecimal.valueOf(8), 2, new ProductCategory( "food" ) ) ) );
+                                                            new Product("Cheese", BigDecimal.valueOf(8), 2, new ProductCategory( "food" ) ) ),
+                                                   new DiscountConfigs( new DiscountConfig( 3, BigDecimal.valueOf( 0.1 ) ),
+                                                                        new DiscountConfig( 3, BigDecimal.valueOf( 0.1 ) ) ) );
 
         final var actualResult = shoppingCart.calculateTotalPrice();
 
@@ -55,7 +55,9 @@ public class ShoppingCartServiceTest {
 
         final var shoppingCart = new ShoppingCart( List.of( new Product("Tea", BigDecimal.valueOf(5.3), 5, new ProductCategory( "drinks" ) ),
                                                             new Product("Coffee", BigDecimal.valueOf(3.5), 2, new ProductCategory( "drinks" ) ),
-                                                            new Product("Cheese", BigDecimal.valueOf(8), 2, new ProductCategory( "food" ) ) ) );
+                                                            new Product("Cheese", BigDecimal.valueOf(8), 2, new ProductCategory( "food" ) ) ),
+                                                   new DiscountConfigs( new DiscountConfig( 3, BigDecimal.valueOf( 0.1 ) ),
+                                                                        new DiscountConfig( 3, BigDecimal.valueOf( 0.1 ) ) ) );
 
         final var actualResult = shoppingCart.calculateTotalPrice();
 

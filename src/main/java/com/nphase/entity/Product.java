@@ -7,9 +7,6 @@ import java.util.function.Function;
 
 public class Product {
 
-    private static final Integer QUANTITY_DISCOUNT_FROM_EXCLUSIVELY = 3;
-    private static final BigDecimal QUANTITY_DISCOUNT_VALUE = BigDecimal.valueOf( 0.1 );
-
     private final String name;
     private final BigDecimal pricePerUnit;
     private final int quantity;
@@ -53,11 +50,11 @@ public class Product {
         return quantity;
     }
 
-    public BigDecimal calculateTotalPrice() {
+    public BigDecimal calculateTotalPrice( final DiscountConfig quantityDiscountConfig ) {
 
-        if ( isAppropriateForQuantityDiscount() ) {
+        if ( quantity > quantityDiscountConfig.getDiscountFromExclusively() ) {
             return pricePerUnit.multiply( BigDecimal.valueOf( quantity ) )
-                               .multiply( BigDecimal.ONE.subtract( QUANTITY_DISCOUNT_VALUE ) );
+                               .multiply( BigDecimal.ONE.subtract( quantityDiscountConfig.getDiscountValue() ) );
         } else {
             return pricePerUnit.multiply( BigDecimal.valueOf( quantity ) );
         }
@@ -66,10 +63,6 @@ public class Product {
 
     public static Function<Product, ProductCategory> groupingByCategoryFunc() {
         return e -> e.category;
-    }
-
-    private boolean isAppropriateForQuantityDiscount() {
-        return quantity > QUANTITY_DISCOUNT_FROM_EXCLUSIVELY;
     }
 
 

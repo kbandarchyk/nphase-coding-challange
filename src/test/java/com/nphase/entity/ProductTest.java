@@ -50,7 +50,7 @@ public class ProductTest {
 
         final var product = new Product( "Tea", BigDecimal.valueOf( 10 ), 2, new ProductCategory( "drinks" ) );
 
-        final var actualResult = product.calculateTotalPrice();
+        final var actualResult = product.calculateTotalPrice( new DiscountConfig( 3, BigDecimal.valueOf( 0.1 ) ) );
 
         Assertions.assertEquals( actualResult.compareTo( BigDecimal.valueOf(20) ), 0 );
 
@@ -61,7 +61,7 @@ public class ProductTest {
 
         final var product = new Product( "Tea", BigDecimal.valueOf( 10 ), 5, new ProductCategory( "drinks" ) );
 
-        final var actualResult = product.calculateTotalPrice();
+        final var actualResult = product.calculateTotalPrice( new DiscountConfig( 3, BigDecimal.valueOf( 0.1 ) ) );
 
         Assertions.assertEquals( actualResult.compareTo( BigDecimal.valueOf(45) ), 0 );
 

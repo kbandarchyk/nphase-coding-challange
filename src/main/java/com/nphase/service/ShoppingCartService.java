@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public class ShoppingCartService {
 
-    public BigDecimal calculateTotalPrice( final ShoppingCart shoppingCart ) {
+    public BigDecimal calculateTotalPrice(final ShoppingCart shoppingCart ) {
         return shoppingCart.calculateTotalPrice();
     }
 }
